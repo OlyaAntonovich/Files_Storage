@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Files_Storage</string>
+    <string name="name" />
+    <string name="surname" />
+    <string name="phone" />
+    <string name="age" />
+    <string name="date_ob_birth" />
+    <string name="btn1" />
+    <string name="table_view">table_view</string>
 </resources>
