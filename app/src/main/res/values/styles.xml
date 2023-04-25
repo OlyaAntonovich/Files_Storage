@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextItem">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/alata</item>
+        <item name="android:textColor">@color/textMain</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ButtonItem">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/alata</item>
+        <item name="android:text">"DEL"</item>
+        <item name="android:textColor">@color/textButton</item>
+        <item name="android:backgroundTint">@color/colorButton</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ButtonFirst">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/alata</item>
+        <item name="android:text">"Submit"</item>
+        <item name="android:textColor">@color/textButton</item>
+        <item name="android:backgroundTint">@color/colorSecondaryVariant</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ButtonNext">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/alata</item>
+        <item name="android:text">"Next Screen"</item>
+        <item name="android:textColor">@color/textButton</item>
+        <item name="android:backgroundTint">#26A69A</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/alata</item>
+        <item name="android:backgroundTint">@color/colorPrimaryVariant</item>
+        <item name="android:textColor">@color/textMain</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+</resources>
