@@ -42,8 +42,8 @@ class FragmentFirst : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        FileDialogFragment().show(
-//            childFragmentManager, FileDialogFragment.TAG)
+        FileDialogFragment().show(
+            childFragmentManager, FileDialogFragment.TAG)
 
         isFileExists()
 
