@@ -7,4 +7,6 @@
     <string name="date_ob_birth" />
     <string name="btn1" />
     <string name="table_view">table_view</string>
+    <string name="order_confirmation" />
+    <string name="ok" />
 </resources>
