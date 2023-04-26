@@ -1,8 +1,6 @@
 package com.example.files_storage.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -12,12 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.files_storage.adapter.Adapter
 import com.example.files_storage.data.Item
 import com.example.files_storage.databinding.FragmentFirstBinding
+import com.example.files_storage.service.WriteOpenFile
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.io.File
@@ -42,11 +40,7 @@ class FragmentFirst : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        FileDialogFragment().show(
-            childFragmentManager, FileDialogFragment.TAG)
-
         isFileExists()
-
 
         val adapter = Adapter(items, requireContext())
 
@@ -66,10 +60,9 @@ class FragmentFirst : Fragment() {
                 button1.setOnClickListener {
                     val item = makeItem(editList)
                     items.add(item)
-                    fileWriteTo(items)
-                    itemsFromFile = fileToTakeOut()
+                    WriteOpenFile(requireContext()).fileWriteTo(items)
+                    itemsFromFile = WriteOpenFile(requireContext()).fileToTakeOut()
                     adapter.setNewList(itemsFromFile)
-//                    tvText.text = itemsFromFile.size.toString()
                 }
             }
 
@@ -161,66 +154,24 @@ class FragmentFirst : Fragment() {
         }
     }
 
-    private fun fileWriteTo(list: MutableList<Item>) {
-
-        val filename = FILE_NAME
-
-        val listRows = mutableListOf<String>()
-
-        var row = ""
-
-        list.forEach {
-            row = (it.name + "/" + it.surname + "/" +
-                    it.phone + "/" + it.age + "/" +
-                    it.dob)
-            listRows.add(row)
-        }
-
-        requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
-
-            it.write(listRows.joinToString("\n").toByteArray())
-
-        }
-
-    }
-
-    private fun fileToTakeOut(): MutableList<Item> {
-
-        val listItems = mutableListOf<Item>()
-
-        requireContext().openFileInput(FILE_NAME).bufferedReader().useLines { lines ->
-
-            lines.forEach {
-                val list = it.split("/") as MutableList<String>
-
-                val item = Item(
-                    list[0],
-                    list[1],
-                    list[2],
-                    list[3],
-                    list[4]
-                )
-                listItems.add(item)
-            }
-        }
-
-        return listItems
-    }
-
     private fun isFileExists() {
 
         val filePath = FILE_DIRECTORY
         val file = File(filePath)
 
         if (file.isFile) {
-            binding.tvText.text = "File exists!!"
+            FileDialogFragment().show(
+                childFragmentManager, FileDialogFragment.TAG
+            )
         } else {
-            binding.tvText.text ="File doesn't exist or program doesn't have access to it"
+            binding.tvText.text = "File doesn't exist or program doesn't have access to it"
         }
     }
 
     companion object {
         const val FILE_NAME = "File_Storage"
+
+        @SuppressLint("SdCardPath")
         const val FILE_DIRECTORY = "/data/data/com.example.files_storage/files/File_Storage"
     }
 

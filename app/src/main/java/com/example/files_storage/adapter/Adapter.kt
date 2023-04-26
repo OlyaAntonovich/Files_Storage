@@ -3,12 +3,11 @@ package com.example.files_storage.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.files_storage.data.Item
 import com.example.files_storage.databinding.ItemBinding
 import com.example.files_storage.R.drawable
-import com.example.files_storage.fragments.FragmentFirst
+import com.example.files_storage.service.WriteOpenFile
 
 class Adapter(
     private val listItems: MutableList<Item>,
@@ -41,10 +40,10 @@ class Adapter(
 
             binding.btnDelete.setOnClickListener {
                 val position = adapterPosition
-                val list = takeListFromFile()
+                val list = WriteOpenFile(context).fileToTakeOut()
                 list.removeAt(position)
                 notifyItemRemoved(position)
-                fileWriteTo(list)
+                WriteOpenFile(context).fileWriteTo(list)
                 setNewList(list)
             }
         }
@@ -73,52 +72,5 @@ class Adapter(
     }
 
     override fun getItemCount(): Int = listItems.size
-
-    fun takeListFromFile(): MutableList<Item>{
-
-        var listItems = mutableListOf<Item>()
-
-        context.openFileInput(FragmentFirst.FILE_NAME).bufferedReader().useLines { lines ->
-
-            lines.forEach {
-                var list = it.split("/") as MutableList<String>
-
-                val item = Item(
-                    list[0],
-                    list[1],
-                    list[2],
-                    list[3],
-                    list[4]
-                )
-                listItems.add(item)
-            }
-        }
-        return listItems
-
-    }
-
-    fun fileWriteTo(list: MutableList<Item>) {
-
-        val filename = FragmentFirst.FILE_NAME
-
-        val listRows = mutableListOf<String>()
-
-        var row = ""
-
-        list.forEach {
-            row = (it.name + "/" + it.surname + "/" +
-                    it.phone + "/" + it.age + "/" +
-                    it.dob)
-            listRows.add(row)
-        }
-
-        context.openFileOutput(filename, Context.MODE_PRIVATE).use {
-
-            it.write(listRows.joinToString("\n").toByteArray())
-
-        }
-
-    }
-
 
 }

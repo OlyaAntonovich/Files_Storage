@@ -9,4 +9,5 @@
     <string name="table_view">table_view</string>
     <string name="order_confirmation" />
     <string name="ok" />
+    <string name="no" />
 </resources>
