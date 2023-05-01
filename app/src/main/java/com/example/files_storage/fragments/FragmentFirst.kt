@@ -1,7 +1,12 @@
 package com.example.files_storage.fragments
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,15 +15,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.files_storage.adapter.Adapter
 import com.example.files_storage.data.Item
 import com.example.files_storage.databinding.FragmentFirstBinding
+import com.example.files_storage.service.Permissions
+import com.example.files_storage.service.WriteOpenExternalMemory
 import com.example.files_storage.service.WriteOpenFile
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.io.File
+import java.security.Permission
 
 
 class FragmentFirst : Fragment() {
@@ -26,6 +37,11 @@ class FragmentFirst : Fragment() {
     private val binding get() = requireNotNull(_binding)
     private var items = mutableListOf<Item>()
     private var itemsFromFile = mutableListOf<Item>()
+//    private val permissionLauncher = registerForActivityResult(
+//        ActivityResultContracts.RequestMultiplePermissions()
+//    ) {
+//
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,9 +52,18 @@ class FragmentFirst : Fragment() {
         .root
 
 
+    @RequiresApi(Build.VERSION_CODES.R)
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        permissionLauncher.launch(
+//            arrayOf(
+//                Manifest.permission.READ_EXTERNAL_STORAGE,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                Manifest.permission.MANAGE_EXTERNAL_STORAGE
+//            )
+//        )
 
         isFileExists()
 
@@ -75,6 +100,23 @@ class FragmentFirst : Fragment() {
                 )
             )
 
+            button2.setOnClickListener {
+
+                if (Permissions().hasPermissions(requireContext())){
+                    binding.tvText.text = "allowed"
+                    WriteOpenExternalMemory(requireContext()).writeToExternalMemory()
+                    }else{Permissions().requestPermissions(requireContext() as Activity, PERMISSION_STORAGE)}
+
+//                binding.tvText.text = Permissions().hasPermissions(requireContext()).toString()
+
+
+//                binding.tvText.text =
+//                    (requireContext()
+//                        .hasPermission(
+//                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+//                        ))
+//                        .toString()
+            }
         }
     }
 
@@ -154,6 +196,7 @@ class FragmentFirst : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun isFileExists() {
 
         val filePath = FILE_DIRECTORY
@@ -164,15 +207,27 @@ class FragmentFirst : Fragment() {
                 childFragmentManager, FileDialogFragment.TAG
             )
         } else {
-            binding.tvText.text = "File doesn't exist or program doesn't have access to it"
+//            binding.tvText.text = "File doesn't exist or program doesn't have access to it"
         }
     }
 
+
     companion object {
         const val FILE_NAME = "File_Storage"
+
+        const val PERMISSION_STORAGE = 101
 
         @SuppressLint("SdCardPath")
         const val FILE_DIRECTORY = "/data/data/com.example.files_storage/files/File_Storage"
     }
 
+
 }
+
+//fun Context.hasPermission(permission: String): Boolean {
+//    return ContextCompat.checkSelfPermission(
+//        this,
+//        permission
+//    ) == PackageManager.PERMISSION_GRANTED
+//}
+
